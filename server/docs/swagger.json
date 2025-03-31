@@ -1,0 +1,118 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Resume Builder API",
+      "version": "1.0.0",
+      "description": "API documentation for Resume Builder Application"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:5000/api",
+        "description": "Local Development Server"
+      }
+    ],
+    "paths": {
+      "/auth/register": {
+        "post": {
+          "summary": "Register a new user",
+          "tags": ["Authentication"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": { "type": "string" },
+                    "email": { "type": "string" },
+                    "password": { "type": "string" }
+                  },
+                  "required": ["name", "email", "password"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": { "description": "User registered successfully" },
+            "400": { "description": "Bad request" }
+          }
+        }
+      },
+      "/auth/login": {
+        "post": {
+          "summary": "Login user",
+          "tags": ["Authentication"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": { "type": "string" },
+                    "password": { "type": "string" }
+                  },
+                  "required": ["email", "password"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "User logged in successfully" },
+            "401": { "description": "Unauthorized" }
+          }
+        }
+      },
+      "/resume/upload": {
+        "post": {
+          "summary": "Upload a resume",
+          "tags": ["Resume Management"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resume": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": { "description": "Resume uploaded successfully" },
+            "400": { "description": "Bad request" }
+          }
+        }
+      },
+      "/admin/users": {
+        "get": {
+          "summary": "Get all users",
+          "tags": ["Admin"],
+          "security": [
+            {
+              "BearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": { "description": "List of users" },
+            "403": { "description": "Forbidden" }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "BearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  }
+  
